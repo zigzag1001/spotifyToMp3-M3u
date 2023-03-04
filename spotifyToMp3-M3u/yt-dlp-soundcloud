@@ -1,0 +1,4 @@
+How to download music from soundcloud and keep the formatting consistent with the automated spotdl
+
+yt-dlp --embed-metadata --embed-thumbnail -o "%(uploader)s - %(title)s.%(ext)s"
+
