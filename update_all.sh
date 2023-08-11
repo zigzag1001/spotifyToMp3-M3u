@@ -15,3 +15,5 @@ jq -r 'to_entries | map(.key + "|" + (.value | tostring)) | .[]' <<<"$json" | \
 
 # Reverse the order of each .m3u file's contents
 for file in *.m3u; do tac "$file" > tmp && mv tmp "$file"; done
+cd ../stuff
+time bash retag.sh
