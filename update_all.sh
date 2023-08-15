@@ -10,10 +10,15 @@ jq -r 'to_entries | map(.key + "|" + (.value | tostring)) | .[]' <<<"$json" | \
     # Print the current key being processed
     echo $key
     # Use spotdl to download the audio file for the current value (a Spotify URL) and save it as a .m3u file with the current key as the filename
-    python3.11 -m spotdl $value --m3u "${key}.m3u"
+    spotdl $value --m3u "$key"
   done
 
 # Reverse the order of each .m3u file's contents
-for file in *.m3u; do tac "$file" > tmp && mv tmp "$file"; done
+for file in *.m3u8; do tac "$file" > tmp && mv tmp "$file"; done
+
+echo "Syncing Discover Weekly..."
+spotdl sync discover-weekly.sync.spotdl --m3u
+
 cd ../stuff
+echo "Retagging..."
 time bash retag.sh
