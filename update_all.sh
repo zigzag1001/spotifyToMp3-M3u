@@ -14,11 +14,10 @@ jq -r 'to_entries | map(.key + "|" + (.value | tostring)) | .[]' <<<"$json" | \
   done
 
 # Reverse the order of each .m3u file's contents
-for file in *.m3u8; do tac "$file" > tmp && mv tmp "$file"; done
-
-echo "Syncing Discover Weekly..."
-spotdl sync discover-weekly.sync.spotdl --m3u
+for file in *.m3u8; do tac "$file" > tmp && mv -f tmp "$file"; done
 
 cd ../stuff
-echo "Retagging..."
 time bash retag.sh
+echo "^^^ Retagging..."
+time bash 320_m3u8.sh
+echo "^^^ >320 playlist"
