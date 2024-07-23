@@ -1,20 +1,11 @@
 #!/bin/bash
 
-cd ../mp3
+# looks wierd becuase was supposed to use null character as delimiter but it dont work with mp3
 
-# Function to process artists
-process_artists() {
-    local artists="$1"
-    # Replace "/" with ", "
-    artists="${artists//\//, }"
-    # Replace ";" with ", "
-    artists="${artists//;/, }"
-    echo "$artists"
-}
+# cd ../mp3
 
-# Function to process album artists
-# Only first artist is used
-process_album_artists() {
+# Function to get first artist
+get_first_artist() {
     local artists="$1"
     # Replace "/" with ", "
     artists="${artists//\//, }"
@@ -31,8 +22,8 @@ PROCESSED_FILES="processed_files.txt"
 # Create the processed_files.txt if it doesn't exist
 touch "$PROCESSED_FILES"
 
-# Loop through all .flac and .mp3 files in the current directory
-for file in *.flac *.mp3; do
+# Loop through all and .mp3 files in the current directory
+for file in *.mp3; do
     # Check if file exists (to handle cases where there are no matching files)
     if [[ -f "$file" ]]; then
         # Skip the file if it is already listed in processed_files.txt
@@ -48,8 +39,8 @@ for file in *.flac *.mp3; do
         album_artist=$(eyeD3 --no-color "$file" | grep -i "^album artist:" | sed 's/^.*: //')
 
         # Process the artists
-        new_artist=$(process_artists "$current_artist")
-        new_album_artist=$(process_album_artists "$album_artist")
+        new_artist=$(get_first_artist "$current_artist")
+        new_album_artist=$(get_first_artist "$album_artist")
 
         # Update the artist tag if it has changed
         if [[ "$current_artist" != "$new_artist" ]]; then
