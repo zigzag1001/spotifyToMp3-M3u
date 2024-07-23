@@ -2,7 +2,7 @@
 
 # looks wierd becuase was supposed to use null character as delimiter but it dont work with mp3
 
-# cd ../mp3
+cd ../mp3
 
 # Function to get first artist
 get_first_artist() {
