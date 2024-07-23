@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# cd ../mp3
+cd ../mp3
 
 # Function to process artists
 process_artists() {
