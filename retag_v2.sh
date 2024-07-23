@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd ../mp3
+# cd ../mp3
 
 # Function to process artists
 process_artists() {
@@ -9,6 +9,19 @@ process_artists() {
     artists="${artists//\//, }"
     # Replace ";" with ", "
     artists="${artists//;/, }"
+    echo "$artists"
+}
+
+# Function to process album artists
+# Only first artist is used
+process_album_artists() {
+    local artists="$1"
+    # Replace "/" with ", "
+    artists="${artists//\//, }"
+    # Replace ";" with ", "
+    artists="${artists//;/, }"
+    # Get the first artist
+    artists=$(echo "$artists" | cut -d "," -f1)
     echo "$artists"
 }
 
@@ -32,13 +45,16 @@ for file in *.flac *.mp3; do
 
         # Get current artist tag
         current_artist=$(eyeD3 --no-color "$file" | grep -i "^artist:" | sed 's/^.*: //')
+        album_artist=$(eyeD3 --no-color "$file" | grep -i "^album artist:" | sed 's/^.*: //')
 
         # Process the artists
         new_artist=$(process_artists "$current_artist")
+        new_album_artist=$(process_album_artists "$album_artist")
 
         # Update the artist tag if it has changed
         if [[ "$current_artist" != "$new_artist" ]]; then
             eyeD3 --artist="$new_artist" "$file"
+            eyeD3 --album-artist="$new_album_artist" "$file"
             echo "Updated artist for $file: $new_artist"
             # Add the file to processed_files.txt
             echo "$file" >> "$PROCESSED_FILES"
