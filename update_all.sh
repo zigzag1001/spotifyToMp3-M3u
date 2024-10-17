@@ -17,3 +17,4 @@ time bash retag_v2.sh
 echo "^^^ Retagging..."
 time bash 320_m3u8.sh
 echo "^^^ >320 playlist"
+python3.11 get_dupes.py ../mp3
